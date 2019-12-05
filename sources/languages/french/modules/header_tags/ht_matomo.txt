@@ -1,0 +1,2 @@
+module_header_tags_matomo_title = Souhaitez-vous activer Matomo ?
+module_header_tags_matomo_description = Tracker, analyser le trafic de votre site

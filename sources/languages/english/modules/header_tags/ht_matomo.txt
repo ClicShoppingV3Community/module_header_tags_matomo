@@ -1,0 +1,2 @@
+module_header_tags_matomo_title = Do you want to install Matomo ?
+module_header_tags_matomo_description = Track, analyse your website traffic
