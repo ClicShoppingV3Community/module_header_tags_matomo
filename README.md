@@ -25,7 +25,8 @@ You must have a link and an ID with Matomo
 Implementation:
 
 - Install the module
-- Activate the module
+Copy the module_header_tags_matomo.json into ClicShopping/Work/Cache/Github (manual installation)
+Activate the module  : Configuration / SEO -Social network / Meta Modles
 
 
 All informations about the ClicShopping
