@@ -79,12 +79,7 @@
 
         if ($CLICSHOPPING_ProductsCommon->getID()) {
           $products_id = (int)$CLICSHOPPING_ProductsCommon->getID();
-/*
-          $products_query = tep_db_query("select p.products_id, pd.products_name, cd.categories_name from " . TABLE_PRODUCTS . " p, " . TABLE_PRODUCTS_DESCRIPTION . " pd, " . TABLE_PRODUCTS_TO_CATEGORIES . " p2c, ". TABLE_CATEGORIES_DESCRIPTION ." cd WHERE p.products_id = pd.products_id and p2c.categories_id = cd.categories_id and p.products_id = " . (int)$HTTP_GET_VARS['products_id'] . " and pd.language_id ='" . (int)$languages_id . "' and cd.language_id ='".(int)$languages_id."'");
-          $products = tep_db_fetch_array($products_query);
-*/
           $footer .= 'piwikTracker.setEcommerceView("' . (int)$CLICSHOPPING_ProductsCommon->getID() . '","' . HTML::outputProtected($CLICSHOPPING_ProductsCommon->getProductsName($products_id)) . '","' . HTML::outputProtected($CLICSHOPPING_Category->getTitle()) . '");' . "\n";
-//          $header .= 'piwikTracker.setEcommerceView("' . (int)$products['products_id'] . '","' . tep_output_string($products['products_name']) . '","' . tep_output_string($products['categories_name']) . '");' . "\n";
         }
 
         $products = $CLICSHOPPING_ShoppingCart->get_products();
@@ -93,8 +88,10 @@
           for ($i=0, $n=count($products); $i<$n; $i++) {
             $Qcategories = $CLICSHOPPING_Db->prepare('select cd.categories_name
                                                        from :table_categories_description cd,
-                                                            :table_products_to_categories c
+                                                            :table_products_to_categories p2c,
+                                                            :table_categories c
                                                        where cd.categories_id = p2c.categories_id 
+                                                       and cd.categories_id = c.categories_id
                                                        and c.status = 1
                                                        and cd.language_id = :language_id
                                                        and virtual_categories = 0
@@ -153,13 +150,14 @@
 
             while ($QorderProducts->fetch()) {
               $Qcategory = $CLICSHOPPING_Db->prepare('select cd.categories_name
-                                                      from categories_description cd,
-                                                           products_to_categories p2c,
-                                                           languages  l
+                                                      from :table_categories_description cd,
+                                                           :table_products_to_categories p2c,
+                                                           :table_languages l
                                                       where p2c.products_id = :products_id
                                                       and p2c.categories_id = cd.categories_id
                                                       and l.code = :code
-                                                      and l.languages_id = cd.language_id limit 1
+                                                      and l.languages_id = cd.language_id 
+                                                      limit 1
                                                      ');
 
               $Qcategory->bindInt(':products_id', $QorderProducts->valueInt('products_id'));
@@ -177,7 +175,7 @@
        $footer .= 'piwikTracker.trackPageView();
         piwikTracker.enableLinkTracking();
         } catch( err ) {}
-        </script><noscript><p><img src="' . HTML::outputProtected(MODULE_HEADER_TAGS_MATOMO_HTTP_URL) . 'piwik.php?idsite=' . (int)MODULE_HEADER_TAGS_MATOMO_ID . '" style="border:0" alt="" /></p></noscript>
+        </script><noscript><p><img src="' . HTML::outputProtected(MODULE_HEADER_TAGS_MATOMO_HTTPS_URL) . 'piwik.php?idsite=' . (int)MODULE_HEADER_TAGS_MATOMO_ID . '" style="border:0" alt="" /></p></noscript>
         <!-- End Piwik Tracking Code -->' . "\n";
         $CLICSHOPPING_Template->addBlock($footer, 'footer_scripts');
       }
