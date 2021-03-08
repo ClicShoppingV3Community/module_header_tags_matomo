@@ -15,8 +15,8 @@
 
   class ht_matomo
   {
-    public string $code;
-    public string $group;
+    public $code;
+    public $group;
     public string $title;
     public string $description;
     public ?int $sort_order = 0;
@@ -86,7 +86,7 @@
         $products = $CLICSHOPPING_ShoppingCart->get_products();
 
         if (isset($_GET['Cart']) && $CLICSHOPPING_ShoppingCart->getCountContents() > 0) {
-          for ($i=0, $n=count($products); $i<$n; $i++) {
+          for ($i=0, $n=\count($products); $i<$n; $i++) {
             $Qcategories = $CLICSHOPPING_Db->prepare('select cd.categories_name
                                                        from :table_categories_description cd,
                                                             :table_products_to_categories p2c,
