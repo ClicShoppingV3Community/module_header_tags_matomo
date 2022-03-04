@@ -111,7 +111,7 @@
           $footer .= 'piwikTracker.trackEcommerceCartUpdate(' . $this->format_raw($CLICSHOPPING_ShoppingCart->show_total()) . ');' . "\n";
         }
 
-        if (isset($_GET['Checkout']) && isset($_GET['Success']) && $CLICSHOPPING_Customer->isLoggedOn() && $CLICSHOPPING_Customer->getID()) {
+        if (isset($_GET['Checkout'], $_GET['Success']) && $CLICSHOPPING_Customer->isLoggedOn() && $CLICSHOPPING_Customer->getID()) {
           $Qorders = $CLICSHOPPING_Db->get('orders', 'orders_id', ['customers_id' => $CLICSHOPPING_Customer->getID()], 'orders_id desc', 1);
           $last_order = $Qorders->valueInt('orders_id');
 
